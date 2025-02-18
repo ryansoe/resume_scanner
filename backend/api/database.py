@@ -1,6 +1,15 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import os
+from sqlalchemy import Column, Integer, String
+from .database import Base
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, unique=True, index=True)
+    hashed_password = Column(String)
 
 DATABASE_URL = "postgresql://resume_user:password@localhost/resume_db"
 

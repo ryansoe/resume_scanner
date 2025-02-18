@@ -1,12 +1,22 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 import shutil
 import os
 from backend.model.extract_text import extract_text
 from backend.api.database import get_db_connection
 from backend.model.nlp_matcher import find_best_resumes
 
+
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Allow requests from React frontend
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allow all headers
+)
 
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
