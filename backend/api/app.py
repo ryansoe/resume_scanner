@@ -40,3 +40,17 @@ async def upload_resume(file: UploadFile = File(...)):
             return {"error": "Database connection failed"}
     else:
         return {"error": "Failed to extract text"}
+    
+@app.get("/resumes/")
+async def get_resumes():
+    """Fetch all stored resumes from PostgreSQL."""
+    conn = get_db_connection()
+    if conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, filename, extracted_text, uploaded_at FROM resumes ORDER BY uploaded_at DESC")
+        resumes = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return {"resumes": resumes}
+    else:
+        return {"error": "Database connection failed"}
